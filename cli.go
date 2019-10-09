@@ -7,7 +7,7 @@ import (
 type outFunc func(string, ...interface{})
 
 var verbose bool
-var verboseOut = func(format string, msg ...interface{}) {
+var verboseLineOut = func(format string, msg ...interface{}) {
 	if verbose {
 		sysOut(format+"\n", msg...)
 	}
@@ -24,16 +24,16 @@ type parameters struct {
 }
 
 func run(p parameters, out outFunc, errOut outFunc) (status int) {
-	const seeUsage = " (see -h for usage)"
+	const seeUsage = "(see -h for usage)"
 	switch {
 	case p.flagsSet == 0:
-		errOut(`No [MODE] flag given!`, seeUsage)
+		errOut(`No [MODE] flag given! %s`, seeUsage)
 		return 1
 	case p.flagsSet > 1:
-		errOut(`Only one [MODE] flag may be set at a time`, seeUsage)
+		errOut(`Only one [MODE] flag may be set at a time %s`, seeUsage)
 		return 1
 	case p.leftoverArgs:
-		errOut(`Leftover arguments after flags`, seeUsage)
+		errOut(`Leftover arguments after flags %s`, seeUsage)
 		return 1
 	}
 
@@ -46,9 +46,9 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 		}
 		if complete {
 			out("OK\n")
-			verboseOut("Integer: %d", decoded)
-			verboseOut("Date: %s", time.Unix(int64(decoded), 0).Format(time.RFC1123Z))
-			verboseOut("Bitstring: %b", decoded)
+			verboseLineOut("Integer: %d", decoded)
+			verboseLineOut("Date: %s", time.Unix(int64(decoded), 0).Format(time.RFC1123Z))
+			verboseLineOut("Bitstring: %b", decoded)
 
 		} else {
 			out("PARTIAL\n")
@@ -65,7 +65,7 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 			}
 		case p.now:
 			rightNow := time.Now()
-			verboseOut("Using current point in time: %s (unix time in seconds: %d)", rightNow.Format(time.RFC1123Z), rightNow.Unix())
+			verboseLineOut("Using current point in time: %s (unix time in seconds: %d)", rightNow.Format(time.RFC1123Z), rightNow.Unix())
 			encoded = encodeUint64(uint64(rightNow.Unix()))
 		case p.bitstring != "":
 			var err error
@@ -79,7 +79,7 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 			encoded = encodeUint64(p.number)
 		}
 
-		verboseOut("Resulting encoded ID:")
+		verboseLineOut("Resulting encoded ID:")
 		out(encoded)
 	}
 	return 0

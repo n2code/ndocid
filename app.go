@@ -15,7 +15,7 @@ func main() {
 
 	benchmark()
 
-	status := run(getParametersFromFlags(), sysOut, sysErrOut)
+	status := run(getParametersFromFlags(), sysOut, sysErrLineOut)
 
 	os.Exit(status)
 }
@@ -24,8 +24,8 @@ func sysOut(format string, msg ...interface{}) {
 	fmt.Fprintf(os.Stdout, format, msg...)
 }
 
-func sysErrOut(format string, msg ...interface{}) {
-	fmt.Fprintf(os.Stderr, format, msg...)
+func sysErrLineOut(format string, msg ...interface{}) {
+	fmt.Fprintf(os.Stderr, format+"\n", msg...)
 }
 
 func getParametersFromFlags() (params parameters) {
@@ -61,12 +61,12 @@ func benchmark() {
 		case "distribution":
 			from, errFrom := strconv.ParseUint(os.Args[3], 10, 64)
 			if errFrom != nil {
-				sysErrOut("%s", errFrom)
+				sysErrLineOut("%s", errFrom)
 				os.Exit(1)
 			}
 			to, errTo := strconv.ParseUint(os.Args[4], 10, 64)
 			if errTo != nil {
-				sysErrOut("%s", errTo)
+				sysErrLineOut("%s", errTo)
 				os.Exit(1)
 			}
 

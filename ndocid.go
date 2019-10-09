@@ -57,12 +57,12 @@ func customBase32Decode(r rune) (i int, ok bool) {
 }
 
 func encodeUint64(i uint64) string {
-	verboseOut("Received numeric input: %d", i)
+	verboseLineOut("Received numeric input: %d", i)
 	return encode(i)
 }
 
 func encodeBitstring(s string) (result string, err error) {
-	verboseOut("Received bitstring input: %s", s)
+	verboseLineOut("Received bitstring input: %s", s)
 	var number uint64
 	if s == "" {
 		err = fmt.Errorf("Empty bitstring input")
@@ -104,7 +104,7 @@ func encodeDatetime(s string) (result string, err error) {
 		return
 	}
 	unixSeconds := t.Unix()
-	verboseOut("Received date input: %s (unix time in seconds: %d)", t.Format(time.RFC1123Z), unixSeconds)
+	verboseLineOut("Received date input: %s (unix time in seconds: %d)", t.Format(time.RFC1123Z), unixSeconds)
 	result = encodeUint64(uint64(unixSeconds))
 	return
 }
@@ -151,32 +151,32 @@ func encode(x uint64) (r string) {
 			th += fmt.Sprintf("%02X ", b)
 			tb += fmt.Sprintf("%08b ", b)
 		}
-		verboseOut("Encoding %d ( %s/ %s):", x, th, tb)
-		verboseOut("  Calculating leading [F]ixed [P]art FP:")
-		verboseOut("    F1 := LSB  3 to  1: %03b (%1d)", f1, f1)
-		verboseOut("    F2 := LSB  6 to  4: %03b (%1d)", f2, f2)
-		verboseOut("    F3 := LSB  9 to  7: %03b (%1d)", f3, f3)
-		verboseOut("    F4 := LSB 12 to 10: %03b (%1d)", f4, f4)
-		verboseOut("    P2 := Even [P]arity bit for  6 LSB := %1b", p2)
-		verboseOut("    P3 := Even [P]arity bit for  9 LSB := %1b", p3)
-		verboseOut("    P4 := Even [P]arity bit for 12 LSB := %1b", p4)
-		verboseOut("    FC := P2 * 4 + P3 * 2 + P4 : %03b (%1d) as input [C]heck digit", fc, fc)
-		verboseOut("    < FP := [FC F1 F2 F3 F4]: %v", fp)
-		verboseOut("  Calculating trailing [V]ariable [P]art VP:")
-		verboseOut("    %d bits remaining: %b", bits.Len64(x>>12), x>>12)
+		verboseLineOut("Encoding %d ( %s/ %s):", x, th, tb)
+		verboseLineOut("  Calculating leading [F]ixed [P]art FP:")
+		verboseLineOut("    F1 := LSB  3 to  1: %03b (%1d)", f1, f1)
+		verboseLineOut("    F2 := LSB  6 to  4: %03b (%1d)", f2, f2)
+		verboseLineOut("    F3 := LSB  9 to  7: %03b (%1d)", f3, f3)
+		verboseLineOut("    F4 := LSB 12 to 10: %03b (%1d)", f4, f4)
+		verboseLineOut("    P2 := Even [P]arity bit for  6 LSB := %1b", p2)
+		verboseLineOut("    P3 := Even [P]arity bit for  9 LSB := %1b", p3)
+		verboseLineOut("    P4 := Even [P]arity bit for 12 LSB := %1b", p4)
+		verboseLineOut("    FC := P2 * 4 + P3 * 2 + P4 : %03b (%1d) as input [C]heck digit", fc, fc)
+		verboseLineOut("    < FP := [FC F1 F2 F3 F4]: %v", fp)
+		verboseLineOut("  Calculating trailing [V]ariable [P]art VP:")
+		verboseLineOut("    %d bits remaining: %b", bits.Len64(x>>12), x>>12)
 		for i, v := range vp {
-			verboseOut("    V%d := next 5 LSB: %05b (%2d)", i+1, v, v)
+			verboseLineOut("    V%d := next 5 LSB: %05b (%2d)", i+1, v, v)
 		}
-		verboseOut("    < VP := [V1 V2 ...]: %v", vp)
-		verboseOut("  Calculating [M]aster [C]heck digit MC:")
-		verboseOut("    FS := [F]ixed    part weighted [S]um: 3*FC + 1*F1 + 3*F2 + 1*F3 + 3*F4: %d", fs)
-		verboseOut("    VS := [V]ariable part weighted [S]um: 3*V1 + 1*V2 + 3*V3 + 1*V4 + ... : %d", vs)
-		verboseOut("    < MC := 29 - ( ( FS + VS ) modulo 29 ): %d", mc)
-		verboseOut("  Concatenating FP & MC & VP:")
-		verboseOut("    < %v & [%d] & %v", fp, mc, vp)
-		verboseOut("  Encoding using custom Base32 mapping...")
-		verboseOut("    Alphabet used: %s", customBase32Alphabet)
-		verboseOut("< Result: %s", r)
+		verboseLineOut("    < VP := [V1 V2 ...]: %v", vp)
+		verboseLineOut("  Calculating [M]aster [C]heck digit MC:")
+		verboseLineOut("    FS := [F]ixed    part weighted [S]um: 3*FC + 1*F1 + 3*F2 + 1*F3 + 3*F4: %d", fs)
+		verboseLineOut("    VS := [V]ariable part weighted [S]um: 3*V1 + 1*V2 + 3*V3 + 1*V4 + ... : %d", vs)
+		verboseLineOut("    < MC := 29 - ( ( FS + VS ) modulo 29 ): %d", mc)
+		verboseLineOut("  Concatenating FP & MC & VP:")
+		verboseLineOut("    < %v & [%d] & %v", fp, mc, vp)
+		verboseLineOut("  Encoding using custom Base32 mapping...")
+		verboseLineOut("    Alphabet used: %s", customBase32Alphabet)
+		verboseLineOut("< Result: %s", r)
 	}
 
 	return r
