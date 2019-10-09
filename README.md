@@ -1,6 +1,9 @@
 # ndocid
 > *human-writeable & human-typeable identifiers*
-
+```console
+$ ndocid -n #Thu, 10 Oct 2019 01:41:40 +0200
+96822L9IPD
+```
 This command-line tool generates an alphanumeric identifier for documents, records or anything, really, from a given point in time, number or a short bitstream (technically speaking: any 64 bit unsigned integer).
 
 The input is encoded in an identifier which has many useful practical properties.
