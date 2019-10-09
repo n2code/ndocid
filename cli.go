@@ -40,7 +40,7 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 	if p.reverse != "" {
 		decoded, err, complete := decode(p.reverse)
 		if err != nil {
-			out("ERROR\n")
+			out("INVALID\n")
 			errOut("%s", err)
 			return 1
 		}
@@ -49,9 +49,9 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 			verboseLineOut("Integer: %d", decoded)
 			verboseLineOut("Date: %s", time.Unix(int64(decoded), 0).Format(time.RFC1123Z))
 			verboseLineOut("Bitstring: %b", decoded)
-
 		} else {
 			out("PARTIAL\n")
+			return 4
 		}
 	} else {
 		var encoded string
@@ -61,7 +61,7 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 			encoded, err = encodeDatetime(p.date)
 			if err != nil {
 				errOut("%s", err)
-				return 1
+				return 2
 			}
 		case p.now:
 			rightNow := time.Now()
@@ -72,7 +72,7 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 			encoded, err = encodeBitstring(p.bitstring)
 			if err != nil {
 				errOut("%s", err)
-				return 1
+				return 2
 			}
 		case p.reverse != "":
 		default:
