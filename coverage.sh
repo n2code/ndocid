@@ -1,2 +1,2 @@
 #!/bin/sh
-go test -coverprofile=cov.out && go tool cover -html=cov.out && rm cov.out
+go test -coverprofile=build/coverage.out . ./cmd/ndocid && go tool cover -html=build/coverage.out

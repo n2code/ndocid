@@ -29,13 +29,13 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 	switch {
 	case p.flagsSet == 0:
 		errOut(`No [MODE] flag given! %s`, seeUsage)
-		return 1
+		return 2
 	case p.flagsSet > 1:
 		errOut(`Only one [MODE] flag may be set at a time %s`, seeUsage)
-		return 1
+		return 2
 	case p.leftoverArgs:
 		errOut(`Leftover arguments after flags %s`, seeUsage)
-		return 1
+		return 2
 	}
 
 	if p.reverse != "" {
