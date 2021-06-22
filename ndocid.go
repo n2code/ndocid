@@ -1,15 +1,26 @@
-package main
+package ndocid
 
 import (
 	"fmt"
 	"math/bits"
+	"os"
 	"strings"
 	"time"
 	"unicode"
 )
 
+// DateFormat referencing Mon Jan 2 15:04:05 -0700 MST 2006
+const DateFormat = "20060102150405"
+
 const customBase32Alphabet = string("23456789ABCDEFHIJKLMNOPQRTUVWXYZ")
-const dateFormat = "20060102150405" //reference: Mon Jan 2 15:04:05 -0700 MST 2006
+
+var Verbose bool
+var verboseLineOut = func(format string, msg ...interface{}) {
+	if Verbose {
+		fmt.Fprintf(os.Stdout, format+"\n", msg...)
+	}
+}
+
 var baseLocation = time.Local
 
 // encodes an integer in range [0,32)
@@ -56,12 +67,12 @@ func customBase32Decode(r rune) (i int, ok bool) {
 	return
 }
 
-func encodeUint64(i uint64) string {
+func EncodeUint64(i uint64) string {
 	verboseLineOut("Received numeric input: %d", i)
 	return encode(i)
 }
 
-func encodeBitstring(s string) (result string, err error) {
+func EncodeBitstring(s string) (result string, err error) {
 	verboseLineOut("Received bitstring input: %s", s)
 	var number uint64
 	if s == "" {
@@ -93,19 +104,19 @@ func encodeBitstring(s string) (result string, err error) {
 	return
 }
 
-func encodeDatetime(s string) (result string, err error) {
-	if len(s) != len(dateFormat) {
-		err = fmt.Errorf("Input date does not match required %d-character-format (see -h)", len(dateFormat))
+func EncodeDatetime(s string) (result string, err error) {
+	if len(s) != len(DateFormat) {
+		err = fmt.Errorf("Input date does not match required %d-character-format (see -h)", len(DateFormat))
 		return
 	}
-	t, err := time.ParseInLocation(dateFormat, s, baseLocation)
+	t, err := time.ParseInLocation(DateFormat, s, baseLocation)
 	if err != nil {
 		err = fmt.Errorf("Bad date format: %s", err)
 		return
 	}
 	unixSeconds := t.Unix()
 	verboseLineOut("Received date input: %s (unix time in seconds: %d)", t.Format(time.RFC1123Z), unixSeconds)
-	result = encodeUint64(uint64(unixSeconds))
+	result = EncodeUint64(uint64(unixSeconds))
 	return
 }
 
@@ -143,7 +154,7 @@ func encode(x uint64) (r string) {
 	}
 	r = acc.String()
 
-	if verbose {
+	if Verbose {
 		//Verbose output
 		var th, tb string
 		for i := bits.LeadingZeros64(x) / 8; i < 8; i++ {
@@ -182,7 +193,7 @@ func encode(x uint64) (r string) {
 	return r
 }
 
-func decode(x string) (r uint64, err error, complete bool) {
+func Decode(x string) (r uint64, err error, complete bool) {
 	defer func() {
 		if err != nil {
 			complete = false

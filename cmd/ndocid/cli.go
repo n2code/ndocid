@@ -2,13 +2,14 @@ package main
 
 import (
 	"time"
+
+	"github.com/n2code/ndocid"
 )
 
 type outFunc func(string, ...interface{})
 
-var verbose bool
 var verboseLineOut = func(format string, msg ...interface{}) {
-	if verbose {
+	if ndocid.Verbose {
 		sysOut(format+"\n", msg...)
 	}
 }
@@ -38,7 +39,7 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 	}
 
 	if p.reverse != "" {
-		decoded, err, complete := decode(p.reverse)
+		decoded, err, complete := ndocid.Decode(p.reverse)
 		if err != nil {
 			out("INVALID\n")
 			errOut("%s", err)
@@ -58,7 +59,7 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 		switch {
 		case p.date != "":
 			var err error
-			encoded, err = encodeDatetime(p.date)
+			encoded, err = ndocid.EncodeDatetime(p.date)
 			if err != nil {
 				errOut("%s", err)
 				return 2
@@ -66,17 +67,17 @@ func run(p parameters, out outFunc, errOut outFunc) (status int) {
 		case p.now:
 			rightNow := time.Now()
 			verboseLineOut("Using current point in time: %s (unix time in seconds: %d)", rightNow.Format(time.RFC1123Z), rightNow.Unix())
-			encoded = encodeUint64(uint64(rightNow.Unix()))
+			encoded = ndocid.EncodeUint64(uint64(rightNow.Unix()))
 		case p.bitstring != "":
 			var err error
-			encoded, err = encodeBitstring(p.bitstring)
+			encoded, err = ndocid.EncodeBitstring(p.bitstring)
 			if err != nil {
 				errOut("%s", err)
 				return 2
 			}
 		case p.reverse != "":
 		default:
-			encoded = encodeUint64(p.number)
+			encoded = ndocid.EncodeUint64(p.number)
 		}
 
 		verboseLineOut("Resulting encoded ID:")
