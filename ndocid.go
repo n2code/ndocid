@@ -9,8 +9,8 @@ import (
 	"unicode"
 )
 
-// DateFormat referencing Mon Jan 2 15:04:05 -0700 MST 2006
-const DateFormat = "20060102150405"
+// dateFormat referencing Mon Jan 2 15:04:05 in local time
+const dateFormat = "20060102150405"
 
 const customBase32Alphabet = string("23456789ABCDEFHIJKLMNOPQRTUVWXYZ")
 
@@ -105,11 +105,11 @@ func EncodeBitstring(s string) (result string, err error) {
 }
 
 func EncodeDatetime(s string) (result string, err error) {
-	if len(s) != len(DateFormat) {
-		err = fmt.Errorf("Input date does not match required %d-character-format (see -h)", len(DateFormat))
+	if len(s) != len(dateFormat) {
+		err = fmt.Errorf("Input date does not match required %d-character-format (see -h)", len(dateFormat))
 		return
 	}
-	t, err := time.ParseInLocation(DateFormat, s, baseLocation)
+	t, err := time.ParseInLocation(dateFormat, s, baseLocation)
 	if err != nil {
 		err = fmt.Errorf("Bad date format: %s", err)
 		return
