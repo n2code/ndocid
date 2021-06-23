@@ -14,6 +14,7 @@ const dateFormat = "20060102150405"
 
 const customBase32Alphabet = string("23456789ABCDEFHIJKLMNOPQRTUVWXYZ")
 
+// Verbose causes all encoding operations to write the algorithm steps to os.Stdout if set
 var Verbose bool
 var verboseLineOut = func(format string, msg ...interface{}) {
 	if Verbose {

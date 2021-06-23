@@ -45,27 +45,27 @@ $ ndocid -b "11010011 01000111" #16 bit
 $ ndocid -h
 Usage of ./ndocid:
   -b "00010110 11011011"
-    	[MODE] Generate ID from string of bits, e.g. "00010110 11011011".
-    	Spaces, tabs, underscores and leading zeros are being dropped.
-    	The maximum length is 64 bits.
-    	Bad input will result in an exit code greater than 0.
+    	BITSTRING-MODE: Generate ID from string of bits, e.g. "00010110 11011011".
+    	  Spaces, tabs, underscores and leading zeros are being dropped.
+    	  The maximum length is 64 bits.
+    	  Bad input will result in an exit code greater than 0.
   -d 20060102150405
-    	[MODE] Generate ID from given date and time.
-    	For example 20060102150405 which represents "Mon Jan 2 15:04:05 2006".
-    	Evaluated in the machine's time zone.
-    	Exit code greater than 0 if the input is not according to format.
+    	DATE-MODE: Generate ID from given date and time.
+    	  For example 20060102150405 which represents "Mon Jan 2 15:04:05 2006".
+    	  Evaluated in the machine's time zone.
+    	  Exit code greater than 0 if the input is not according to format.
   -i 42
-    	[MODE] Generate ID from number, e.g. 42.
-    	Accepts any positive decimal number that can fit in an unsigned 64 bit integer.
-    	Exit code greater than 0 if input exceeds range.
-  -n	[MODE] Generate ID from current date and time of this machine.
+    	INTEGER-MODE: Generate ID from number, e.g. 42.
+    	  Accepts any positive decimal number that can fit in an unsigned 64 bit integer.
+    	  Exit code greater than 0 if input exceeds range.
+  -n	NOW-MODE: Generate ID from current date and time of this machine.
   -r 72639D77LD
-    	[MODE] Reversing check: Validates given ID, e.g. 72639D77LD.
-    	Exit code 0: Valid full ID
-    	Exit code 1: Invalid ID
-    	Exit code 4: Plausible partial ID, needs further digits
-    	The first line returned is OK / ERROR / PARTIAL for exit codes 0 / 1 / 4.
-  -v	Verbose: More output.
-    	Explains algorithm in MODEs that generate IDs.
-    	Provides possible source representations when reversing is successful.
+    	REVERSING/CHECK-MODE: Validates given ID, e.g. 72639D77LD.
+    	  Exit code 0: Valid full ID
+    	  Exit code 1: Invalid ID
+    	  Exit code 4: Plausible partial ID (beginning), needs further digits
+    	  The first line returned is OK / ERROR / PARTIAL for exit codes 0 / 1 / 4.
+  -v	Verbose option: Generate more human-readable output.
+    	  Explains algorithm in MODEs that generate IDs.
+    	  Provides possible source representations when reversing is successful.
 ```
